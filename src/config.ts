@@ -24,6 +24,8 @@ export function getConfig(): StreamSafeConfig {
       '**/credentials.*',
       '**/*.pem',
       '**/*.key',
+      '**/*secret*',
+      '**/*password*',
     ]),
     obsSourceName: cfg.get<string>('obsSourceName', 'StreamSafe_Cover'),
     obsSceneName: cfg.get<string>('obsSceneName', ''),
