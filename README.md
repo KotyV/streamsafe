@@ -1,33 +1,33 @@
 # StreamSafe
 
-**Protège automatiquement vos fichiers sensibles pendant un live stream.**
+**Automatically protect your sensitive files while live streaming.**
 
-StreamSafe détecte quand vous ouvrez un fichier `.env`, des clés privées ou d'autres fichiers sensibles dans VS Code, et active automatiquement une source OBS qui masque votre écran sur le stream.
+StreamSafe detects when you open a `.env` file, private keys, or other sensitive files in VS Code and automatically enables an OBS source that covers your screen on the stream.
 
-Plus jamais de leak de secrets en live.
+Never leak secrets on stream again.
 
 ---
 
-## Fonctionnement
+## How It Works
 
 ```
-Fichier .env ouvert → StreamSafe détecte → OBS masque l'écran
-Fichier .env fermé  → StreamSafe détecte → OBS démasque l'écran
+.env file opened  --> StreamSafe detects --> OBS covers the screen
+.env file closed  --> StreamSafe detects --> OBS uncovers the screen
 ```
 
-StreamSafe communique avec OBS Studio via le protocole **OBS WebSocket v5** pour activer/désactiver une source de couverture dans votre scène.
+StreamSafe communicates with OBS Studio via the **OBS WebSocket v5** protocol to toggle a cover source in your scene.
 
 ---
 
 ## Installation
 
-### Depuis le Marketplace VS Code
+### From the VS Code Marketplace
 
-1. Ouvrir VS Code
-2. `Ctrl+Shift+X` → Rechercher "StreamSafe"
-3. Installer
+1. Open VS Code
+2. `Ctrl+Shift+X` --> Search "StreamSafe"
+3. Install
 
-### Depuis les sources
+### From Source
 
 ```bash
 git clone https://github.com/KotyV/streamsafe.git
@@ -36,54 +36,54 @@ npm install
 npm run compile
 ```
 
-Puis dans VS Code : `F5` pour lancer en mode développement.
+Then in VS Code: press `F5` to launch in development mode.
 
 ---
 
-## Configuration OBS (obligatoire)
+## OBS Setup (required)
 
-### Étape 1 : Activer le WebSocket Server dans OBS
+### Step 1: Enable WebSocket Server in OBS
 
-1. Ouvrir **OBS Studio** (v28+ requis pour WebSocket v5)
-2. Menu → **Outils** → **Paramètres du serveur WebSocket**
-3. Cocher **Activer le serveur WebSocket**
-4. Choisir un port (par défaut : `4455`)
-5. Optionnel : définir un mot de passe
-6. Cliquer **Appliquer**
+1. Open **OBS Studio** (v28+ required for WebSocket v5)
+2. Menu --> **Tools** --> **WebSocket Server Settings**
+3. Check **Enable WebSocket Server**
+4. Choose a port (default: `4455`)
+5. Optional: set a password
+6. Click **Apply**
 
-### Étape 2 : Créer la source de couverture
+### Step 2: Create the Cover Source
 
-1. Dans votre **scène de stream**, cliquer **+** dans le panneau Sources
-2. Choisir **Image** (ou **Couleur unie**)
-3. Nommer la source : **`StreamSafe_Cover`** (exactement ce nom)
-4. Configurer :
-   - **Image** : choisir une image de couverture (ex: "BRB", logo, écran noir)
-   - **Couleur unie** : choisir une couleur opaque
-5. Redimensionner la source pour couvrir **tout l'écran**
-6. **Cacher la source** (clic sur l'icône œil) — StreamSafe l'activera automatiquement
+1. In your **streaming scene**, click **+** in the Sources panel
+2. Choose **Image** (or **Color Source**)
+3. Name the source: **`StreamSafe_Cover`** (this exact name)
+4. Configure:
+   - **Image**: choose a cover image (e.g. "BRB", logo, black screen)
+   - **Color Source**: pick an opaque color
+5. Resize the source to cover the **entire screen**
+6. **Hide the source** (click the eye icon) -- StreamSafe will enable it automatically
 
-> **Important** : La source doit être **au-dessus** de votre capture d'écran/fenêtre dans la liste des sources OBS (elle la recouvre quand activée).
+> **Important**: The source must be **above** your screen/window capture in the OBS source list (it covers them when enabled).
 
-### Étape 3 : Configurer StreamSafe dans VS Code
+### Step 3: Configure StreamSafe in VS Code
 
-Ouvrir les paramètres VS Code (`Ctrl+,`) et chercher "StreamSafe" :
+Open VS Code settings (`Ctrl+,`) and search "StreamSafe":
 
-| Paramètre | Défaut | Description |
-|-----------|--------|-------------|
-| `streamsafe.obsWebSocketUrl` | `ws://localhost:4455` | URL du WebSocket OBS |
-| `streamsafe.obsWebSocketPassword` | *(vide)* | Mot de passe WebSocket |
-| `streamsafe.obsSourceName` | `StreamSafe_Cover` | Nom de la source OBS à activer |
-| `streamsafe.obsSceneName` | *(vide = scène active)* | Scène OBS cible |
-| `streamsafe.sensitivePatterns` | `.env`, `.pem`, etc. | Patterns de fichiers sensibles |
-| `streamsafe.enabled` | `true` | Activer/désactiver |
-| `streamsafe.showNotifications` | `true` | Notifications VS Code |
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `streamsafe.obsWebSocketUrl` | `ws://localhost:4455` | OBS WebSocket URL |
+| `streamsafe.obsWebSocketPassword` | *(empty)* | WebSocket password |
+| `streamsafe.obsSourceName` | `StreamSafe_Cover` | OBS source name to toggle |
+| `streamsafe.obsSceneName` | *(empty = active scene)* | Target OBS scene |
+| `streamsafe.sensitivePatterns` | `.env`, `.pem`, etc. | Sensitive file glob patterns |
+| `streamsafe.enabled` | `true` | Enable/disable StreamSafe |
+| `streamsafe.showNotifications` | `true` | Show VS Code notifications |
 
-Ou dans `settings.json` :
+Or in `settings.json`:
 
 ```json
 {
   "streamsafe.obsWebSocketUrl": "ws://localhost:4455",
-  "streamsafe.obsWebSocketPassword": "votre_mot_de_passe",
+  "streamsafe.obsWebSocketPassword": "your_password",
   "streamsafe.obsSourceName": "StreamSafe_Cover",
   "streamsafe.sensitivePatterns": [
     "**/.env",
@@ -97,9 +97,9 @@ Ou dans `settings.json` :
 
 ---
 
-## Fichiers détectés par défaut
+## Default Detected Files
 
-| Pattern | Exemple |
+| Pattern | Example |
 |---------|---------|
 | `**/.env` | `.env` |
 | `**/.env.*` | `.env.local`, `.env.production` |
@@ -107,83 +107,90 @@ Ou dans `settings.json` :
 | `**/credentials.*` | `credentials.json` |
 | `**/*.pem` | `private-key.pem` |
 | `**/*.key` | `server.key` |
+| `**/*secret*` | `my-secret-config.json` |
+| `**/*password*` | `password-list.txt` |
 
-Vous pouvez ajouter vos propres patterns dans les paramètres.
-
----
-
-## Commandes
-
-| Commande | Description |
-|----------|-------------|
-| `StreamSafe: Activer/Désactiver` | Toggle on/off |
-| `StreamSafe: Reconnecter à OBS` | Reconnecter après une déconnexion |
-| `StreamSafe: Afficher le statut` | Voir l'état actuel |
-
-Accès via `Ctrl+Shift+P` → taper "StreamSafe".
+You can add your own patterns in the settings.
 
 ---
 
-## Barre de statut
+## Commands
 
-StreamSafe affiche un indicateur dans la barre de statut VS Code :
+| Command | Description |
+|---------|-------------|
+| `StreamSafe: Toggle` | Enable/disable StreamSafe |
+| `StreamSafe: Reconnect to OBS` | Reconnect after a disconnection |
+| `StreamSafe: Show Status` | View current status |
 
-| Icône | État |
-|-------|------|
-| 🛡️ `StreamSafe` | Connecté, prêt |
-| 🛡️ `StreamSafe (off)` | Déconnecté d'OBS |
-| 👁️‍🗨️ `StreamSafe ACTIF` | Écran masqué (fichier sensible ouvert) |
-| ⚠️ `StreamSafe` | Erreur de connexion |
-
----
-
-## Stack technique
-
-- **TypeScript** — Code typé
-- **API VS Code** — Événements éditeur
-- **obs-websocket-js v5** — Communication OBS
-- **minimatch** — Pattern matching fichiers
+Access via `Ctrl+Shift+P` --> type "StreamSafe".
 
 ---
 
-## Développement
+## Status Bar
+
+StreamSafe displays an indicator in the VS Code status bar:
+
+| Icon | State |
+|------|-------|
+| `$(shield) StreamSafe` | Connected, ready |
+| `$(shield) StreamSafe (off)` | Disconnected from OBS |
+| `$(eye-closed) StreamSafe ACTIVE` | Screen covered (sensitive file open) |
+| `$(warning) StreamSafe` | Connection error |
+
+---
+
+## Tech Stack
+
+- **TypeScript** -- Typed codebase
+- **VS Code API** -- Editor events
+- **obs-websocket-js v5** -- OBS communication
+- **minimatch** -- File pattern matching
+
+---
+
+## Development
 
 ```bash
-# Installer les dépendances
+# Install dependencies
 npm install
 
-# Compiler
+# Compile
 npm run compile
 
 # Watch mode
 npm run watch
 
-# Lancer dans VS Code (F5)
-# → Ouvre une fenêtre Extension Development Host
+# Launch in VS Code (F5)
+# --> Opens an Extension Development Host window
 
-# Packager en .vsix
+# Lint
+npm run lint
+
+# Package as .vsix
 npm run package
 ```
 
 ---
 
-## Publier sur le Marketplace
+## Publishing
 
 ```bash
-# Installer vsce
+# Install vsce
 npm install -g @vscode/vsce
 
-# Se connecter
+# Login
 vsce login KotyV
 
-# Publier
+# Publish
 vsce publish
 ```
 
-Prérequis : un [Personal Access Token Azure DevOps](https://code.visualstudio.com/api/working-with-extensions/publishing-extension).
+Requires an [Azure DevOps Personal Access Token](https://code.visualstudio.com/api/working-with-extensions/publishing-extension).
 
 ---
 
-## Licence
+## License
 
 MIT
+
+Made with caffeine in Marseille. For Charlie.

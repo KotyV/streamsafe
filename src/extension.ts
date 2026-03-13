@@ -36,7 +36,7 @@ export async function activate(
     updateStatusBar('disconnected');
     if (config.showNotifications) {
       vscode.window.showWarningMessage(
-        'StreamSafe: Connexion OBS perdue. Utilisez "StreamSafe: Reconnecter" pour rétablir.',
+        'StreamSafe: OBS connection lost. Use "StreamSafe: Reconnect to OBS" to restore.',
       );
     }
   });
@@ -93,12 +93,12 @@ export async function activate(
       await cfg.update('enabled', !current, vscode.ConfigurationTarget.Global);
       if (!current) {
         await connectToObs();
-        vscode.window.showInformationMessage('StreamSafe activé');
+        vscode.window.showInformationMessage('StreamSafe enabled');
       } else {
         await hideCover();
         await obsClient.disconnect();
         updateStatusBar('disabled');
-        vscode.window.showInformationMessage('StreamSafe désactivé');
+        vscode.window.showInformationMessage('StreamSafe disabled');
       }
     }),
   );
@@ -114,9 +114,9 @@ export async function activate(
       const connected = obsClient.isConnected();
       const enabled = getConfig().enabled;
       vscode.window.showInformationMessage(
-        `StreamSafe: ${enabled ? 'Activé' : 'Désactivé'} | ` +
-          `OBS: ${connected ? 'Connecté' : 'Déconnecté'} | ` +
-          `Protection: ${isCovering ? 'Active (écran masqué)' : 'Inactive'}`,
+        `StreamSafe: ${enabled ? 'Enabled' : 'Disabled'} | ` +
+          `OBS: ${connected ? 'Connected' : 'Disconnected'} | ` +
+          `Protection: ${isCovering ? 'Active (screen covered)' : 'Inactive'}`,
       );
     }),
   );
@@ -131,13 +131,13 @@ async function connectToObs(): Promise<void> {
     await obsClient.connect(config.obsWebSocketUrl, config.obsWebSocketPassword);
     updateStatusBar('connected');
     if (config.showNotifications) {
-      vscode.window.showInformationMessage('StreamSafe: Connecté à OBS');
+      vscode.window.showInformationMessage('StreamSafe: Connected to OBS');
     }
   } catch {
     updateStatusBar('error');
     vscode.window.showErrorMessage(
-      'StreamSafe: Impossible de se connecter à OBS WebSocket. ' +
-        'Vérifiez qu\'OBS est lancé avec le WebSocket Server activé.',
+      'StreamSafe: Unable to connect to OBS WebSocket. ' +
+        'Make sure OBS is running with the WebSocket Server enabled.',
     );
   }
 }
@@ -170,7 +170,7 @@ async function showCover(): Promise<void> {
     updateStatusBar('covering');
     if (config.showNotifications) {
       vscode.window.showWarningMessage(
-        'StreamSafe: Fichier sensible détecté — écran masqué sur le stream',
+        'StreamSafe: Sensitive file detected — screen covered on stream',
       );
     }
   } catch (err) {
@@ -196,7 +196,7 @@ async function hideCover(): Promise<void> {
     updateStatusBar('connected');
     if (config.showNotifications) {
       vscode.window.showInformationMessage(
-        'StreamSafe: Plus de fichier sensible — écran visible sur le stream',
+        'StreamSafe: No more sensitive files — screen visible on stream',
       );
     }
   } catch (err) {
@@ -233,31 +233,31 @@ function updateStatusBar(
   switch (state) {
     case 'connected':
       statusBarItem.text = '$(shield) StreamSafe';
-      statusBarItem.tooltip = 'StreamSafe: Connecté à OBS — Prêt';
+      statusBarItem.tooltip = 'StreamSafe: Connected to OBS — Ready';
       statusBarItem.backgroundColor = undefined;
       break;
     case 'disconnected':
       statusBarItem.text = '$(shield) StreamSafe (off)';
-      statusBarItem.tooltip = 'StreamSafe: Déconnecté d\'OBS';
+      statusBarItem.tooltip = 'StreamSafe: Disconnected from OBS';
       statusBarItem.backgroundColor = undefined;
       break;
     case 'covering':
-      statusBarItem.text = '$(eye-closed) StreamSafe ACTIF';
-      statusBarItem.tooltip = 'StreamSafe: Écran masqué (fichier sensible ouvert)';
+      statusBarItem.text = '$(eye-closed) StreamSafe ACTIVE';
+      statusBarItem.tooltip = 'StreamSafe: Screen covered (sensitive file open)';
       statusBarItem.backgroundColor = new vscode.ThemeColor(
         'statusBarItem.warningBackground',
       );
       break;
     case 'error':
       statusBarItem.text = '$(warning) StreamSafe';
-      statusBarItem.tooltip = 'StreamSafe: Erreur de connexion OBS';
+      statusBarItem.tooltip = 'StreamSafe: OBS connection error';
       statusBarItem.backgroundColor = new vscode.ThemeColor(
         'statusBarItem.errorBackground',
       );
       break;
     case 'disabled':
-      statusBarItem.text = '$(shield) StreamSafe (désactivé)';
-      statusBarItem.tooltip = 'StreamSafe: Désactivé';
+      statusBarItem.text = '$(shield) StreamSafe (disabled)';
+      statusBarItem.tooltip = 'StreamSafe: Disabled';
       statusBarItem.backgroundColor = undefined;
       break;
   }

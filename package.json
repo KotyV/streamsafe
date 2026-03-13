@@ -1,7 +1,7 @@
 {
   "name": "streamsafe",
   "displayName": "StreamSafe",
-  "description": "Protège automatiquement vos fichiers sensibles (.env, secrets) pendant un stream en activant un filtre OBS qui masque VS Code.",
+  "description": "Automatically protect sensitive files (.env, secrets) while streaming by toggling an OBS source that covers VS Code.",
   "version": "0.1.0",
   "publisher": "KotyV",
   "license": "MIT",
@@ -36,12 +36,12 @@
         "streamsafe.obsWebSocketUrl": {
           "type": "string",
           "default": "ws://localhost:4455",
-          "description": "URL du serveur OBS WebSocket (v5)"
+          "description": "OBS WebSocket server URL (v5)"
         },
         "streamsafe.obsWebSocketPassword": {
           "type": "string",
           "default": "",
-          "description": "Mot de passe OBS WebSocket (laisser vide si pas de mot de passe)"
+          "description": "OBS WebSocket password (leave empty if none)"
         },
         "streamsafe.sensitivePatterns": {
           "type": "array",
@@ -57,42 +57,42 @@
             "**/*secret*",
             "**/*password*"
           ],
-          "description": "Patterns glob des fichiers considérés comme sensibles"
+          "description": "Glob patterns for files considered sensitive"
         },
         "streamsafe.obsSourceName": {
           "type": "string",
           "default": "StreamSafe_Cover",
-          "description": "Nom de la source OBS à activer pour masquer l'écran"
+          "description": "OBS source name to toggle for covering the screen"
         },
         "streamsafe.obsSceneName": {
           "type": "string",
           "default": "",
-          "description": "Nom de la scène OBS (laisser vide pour la scène active)"
+          "description": "OBS scene name (leave empty for the active scene)"
         },
         "streamsafe.enabled": {
           "type": "boolean",
           "default": true,
-          "description": "Activer/désactiver StreamSafe"
+          "description": "Enable/disable StreamSafe"
         },
         "streamsafe.showNotifications": {
           "type": "boolean",
           "default": true,
-          "description": "Afficher des notifications quand StreamSafe masque/démasque l'écran"
+          "description": "Show notifications when StreamSafe covers/uncovers the screen"
         }
       }
     },
     "commands": [
       {
         "command": "streamsafe.toggle",
-        "title": "StreamSafe: Activer/Désactiver"
+        "title": "StreamSafe: Toggle"
       },
       {
         "command": "streamsafe.reconnect",
-        "title": "StreamSafe: Reconnecter à OBS"
+        "title": "StreamSafe: Reconnect to OBS"
       },
       {
         "command": "streamsafe.status",
-        "title": "StreamSafe: Afficher le statut"
+        "title": "StreamSafe: Show Status"
       }
     ]
   },

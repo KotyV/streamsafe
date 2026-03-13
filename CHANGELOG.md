@@ -4,10 +4,10 @@
 
 ### Added
 
-- Détection automatique des fichiers sensibles (.env, .pem, .key, secrets, credentials)
-- Connexion OBS WebSocket v5
-- Activation/désactivation automatique d'une source OBS de couverture
-- Patterns de fichiers configurables
-- Commandes : toggle, reconnect, status
-- Indicateur dans la barre de statut VS Code
-- Notifications contextuelles
+- Automatic detection of sensitive files (.env, .pem, .key, secrets, credentials)
+- OBS WebSocket v5 connection
+- Automatic toggle of an OBS cover source when sensitive files are opened/closed
+- Configurable file patterns
+- Commands: toggle, reconnect, status
+- VS Code status bar indicator
+- Contextual notifications
