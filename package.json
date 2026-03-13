@@ -1,0 +1,120 @@
+{
+  "name": "streamsafe",
+  "displayName": "StreamSafe",
+  "description": "Protège automatiquement vos fichiers sensibles (.env, secrets) pendant un stream en activant un filtre OBS qui masque VS Code.",
+  "version": "0.1.0",
+  "publisher": "KotyV",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KotyV/streamsafe"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "obs",
+    "stream",
+    "twitch",
+    "security",
+    "env",
+    "secrets",
+    "privacy"
+  ],
+  "icon": "assets/icon.png",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "StreamSafe",
+      "properties": {
+        "streamsafe.obsWebSocketUrl": {
+          "type": "string",
+          "default": "ws://localhost:4455",
+          "description": "URL du serveur OBS WebSocket (v5)"
+        },
+        "streamsafe.obsWebSocketPassword": {
+          "type": "string",
+          "default": "",
+          "description": "Mot de passe OBS WebSocket (laisser vide si pas de mot de passe)"
+        },
+        "streamsafe.sensitivePatterns": {
+          "type": "array",
+          "default": [
+            "**/.env",
+            "**/.env.*",
+            "**/.env.local",
+            "**/.env.production",
+            "**/secrets.*",
+            "**/credentials.*",
+            "**/*.pem",
+            "**/*.key",
+            "**/*secret*",
+            "**/*password*"
+          ],
+          "description": "Patterns glob des fichiers considérés comme sensibles"
+        },
+        "streamsafe.obsSourceName": {
+          "type": "string",
+          "default": "StreamSafe_Cover",
+          "description": "Nom de la source OBS à activer pour masquer l'écran"
+        },
+        "streamsafe.obsSceneName": {
+          "type": "string",
+          "default": "",
+          "description": "Nom de la scène OBS (laisser vide pour la scène active)"
+        },
+        "streamsafe.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Activer/désactiver StreamSafe"
+        },
+        "streamsafe.showNotifications": {
+          "type": "boolean",
+          "default": true,
+          "description": "Afficher des notifications quand StreamSafe masque/démasque l'écran"
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "streamsafe.toggle",
+        "title": "StreamSafe: Activer/Désactiver"
+      },
+      {
+        "command": "streamsafe.reconnect",
+        "title": "StreamSafe: Reconnecter à OBS"
+      },
+      {
+        "command": "streamsafe.status",
+        "title": "StreamSafe: Afficher le statut"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.3",
+    "@vscode/vsce": "^2.22.0"
+  },
+  "dependencies": {
+    "obs-websocket-js": "^5.0.6",
+    "minimatch": "^9.0.3"
+  }
+}
